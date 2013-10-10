@@ -44,6 +44,8 @@ $(selector).overscroll([options]);
         - The direction scrolled when the mouse wheel is triggered. Options are 'multi' for multi-directional scrolling, 'horizontal' for left/right scrolling, and 'vertical' for up/down scrolling.
     * `options.wheelDelta` `{Number: 20}`
         - The amount of drift to apply per mouse wheel 'tick'
+    * `options.wheelReleaseOnBound` `{Boolean: false}`
+        - Designates whether or not to bubble scroll to the parent
     * `options.scrollDelta` `{Number: 5.7}`
         - The amount of drift to apply per drag interval
     * `options.zIndex` `{Number: 999}`

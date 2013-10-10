@@ -134,7 +134,8 @@
 		captureWheel:   true,
 		wheelDelta:     settings.wheelDelta,
 		wheelDirection: 'multi',
-		zIndex:         999
+		zIndex:         999,
+        wheelReleaseOnBound: false
 	};
 
 	// Triggers a DOM event on the overscrolled element.
@@ -238,9 +239,6 @@
 	// handles mouse wheel scroll events
 	function wheel(event) {
 
-		// prevent any default wheel behavior
-		event.preventDefault();
-
 		var data = event.data,
 		options = data.options,
 		sizing = data.sizing,
@@ -248,7 +246,8 @@
 		dwheel = data.wheel,
 		flags = data.flags,
 		original = event.originalEvent,
-		delta = 0, deltaX = 0, deltaY = 0;
+		delta = 0, deltaX = 0, deltaY = 0,
+        prevTop, prevLeft;
 
 		// stop any drifts
 		flags.drifting = false;
@@ -284,6 +283,9 @@
 			toggleThumbs(thumbs, options, true);
 		}
 
+        prevLeft = this.scrollLeft;
+        prevTop = this.scrollTop;
+
 		// actually modify scroll offsets
 		if (options.wheelDirection === 'vertical'){
 			this.scrollTop -= delta;
@@ -293,6 +295,11 @@
 			this.scrollLeft -= deltaX;
 			this.scrollTop  -= deltaY || delta;
 		}
+
+        if ( !(options.wheelReleaseOnBound && ( (options.wheelDirection === 'horizontal' && prevLeft === this.scrollLeft) || (options.wheelDirection !== 'horizontal' && prevTop === this.scrollTop) ) ) ) {
+            // prevent any default wheel behavior
+            event.preventDefault();
+        }
 
 		if (dwheel.timeout) { cancel(dwheel.timeout); }
 
